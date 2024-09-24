@@ -2,7 +2,7 @@ function WatchList({ watchList }) {
   return (
     <div>
       <h2>Watchlist</h2>
-      {watchList.length === 0 ? (
+      {watchList?.length === 0 ? (
         <p>No musics found</p>
       ) : (
         watchList.map((music) => {

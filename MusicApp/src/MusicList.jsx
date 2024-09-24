@@ -4,14 +4,16 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 function MusicList({ addToWatchList }) {
-  const [musics, setMusics] = useState();
+  const [musics, setMusics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("https://openwhyd.org/adrien");
-      setMusics(response.data || []);
+      const response = await axios.get(
+        "https://musicbrainz.org/ws/2/artist?query=beatles&fmt=json"
+      );
+      setMusics(response.data.artists || []);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -39,12 +41,15 @@ function MusicList({ addToWatchList }) {
         <p>No musics found</p>
       ) : (
         <ul>
-          {musics?.map((music) => (
-            <li key={music.id}>
-              {music.name}
-              <button onClick={() => handleAdd(music)}>Add to watchlist</button>
-            </li>
-          ))}
+          {Array.isArray(musics) &&
+            musics?.map((music) => (
+              <li key={music.id}>
+                {music.name}
+                <button onClick={() => handleAdd(music)}>
+                  Add to watchlist
+                </button>
+              </li>
+            ))}
         </ul>
       )}
       <ToastContainer />
